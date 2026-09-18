@@ -1,0 +1,46 @@
+import { Router } from "express";
+import authRoutes from "../modules/auth/auth.routes";
+import academicRoutes from "../modules/academic/academic.routes";
+import studentsRoutes from "../modules/students/students.routes";
+import teachersRoutes from "../modules/teachers/teachers.routes";
+import attendanceRoutes from "../modules/attendance/attendance.routes";
+import assignmentsRoutes from "../modules/assignments/assignments.routes";
+import examsRoutes from "../modules/exams/exams.routes";
+import analyticsRoutes from "../modules/analytics/analytics.routes";
+import reportsRoutes from "../modules/reports/reports.routes";
+import queriesRoutes from "../modules/queries/queries.routes";
+import notificationsRoutes from "../modules/notifications/notifications.routes";
+import noticesRoutes from "../modules/notices/notices.routes";
+import feedbackRoutes from "../modules/feedback/feedback.routes";
+import settingsRoutes from "../modules/settings/settings.routes";
+import studyMaterialsRoutes from "../modules/study-materials/study-materials.routes";
+import permissionsRoutes from "../modules/permissions/permissions.routes";
+import auditRoutes from "../modules/audit/audit.routes";
+import passwordResetRoutes from "../modules/password-reset/password-reset.routes";
+import visitorRoutes from "../modules/visitor/visitor.routes";
+import adminOverviewRoutes from "../modules/admin-overview/admin-overview.routes";
+
+const router = Router();
+
+router.use("/auth", authRoutes);
+router.use("/academic", academicRoutes);
+router.use("/students", studentsRoutes);
+router.use("/teachers", teachersRoutes);
+router.use("/attendance", attendanceRoutes);
+router.use("/assignments", assignmentsRoutes);
+router.use("/exams", examsRoutes);
+router.use("/analytics", analyticsRoutes);
+router.use("/reports", reportsRoutes);
+router.use("/queries", queriesRoutes);
+router.use("/notifications", notificationsRoutes);
+router.use("/notices", noticesRoutes);
+router.use("/feedback", feedbackRoutes);
+router.use("/settings", settingsRoutes);
+router.use("/study-materials", studyMaterialsRoutes);
+router.use("/permissions", permissionsRoutes);
+router.use("/audit-logs", auditRoutes);
+router.use("/password-reset", passwordResetRoutes);
+router.use("/visitor", visitorRoutes);
+router.use("/admin-overview", adminOverviewRoutes);
+
+export default router;

@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: edusphere-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: edusphere
+      POSTGRES_PASSWORD: edusphere_dev_password
+      POSTGRES_DB: edusphere_ai
+    ports:
+      - "5432:5432"
+    volumes:
+      - edusphere_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U edusphere -d edusphere_ai"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: edusphere-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: "postgresql://edusphere:edusphere_dev_password@postgres:5432/edusphere_ai?schema=public"
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-change_this_access_secret_in_production}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-change_this_refresh_secret_in_production}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
+    ports:
+      - "4000:4000"
+    volumes:
+      - edusphere_uploads:/app/apps/api/uploads
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      # Only needed if the frontend and API are on different domains/hosts —
+      # leave unset for this same-machine docker-compose setup (nginx proxies
+      # /api to the api container automatically, see apps/web/nginx.conf).
+      # args:
+      #   VITE_API_URL: https://api.yourdomain.com/api/v1
+    container_name: edusphere-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "5173:80"
+
+volumes:
+  edusphere_pgdata:
+  edusphere_uploads:
